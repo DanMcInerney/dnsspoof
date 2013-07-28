@@ -15,7 +15,7 @@ parser.add_argument("-dns", "--dnsspoof", help="Spoof DNS responses of a specifi
 args = parser.parse_args()
 localIP = [x[4] for x in scapy.all.conf.route.routes if x[2] != '0.0.0.0'][0]
 
-def cb(payload):
+def dnsspoof_cb(payload):
 	data = payload.get_data()
 	pkt = IP(data)
 	ip_layer = pkt[IP]
@@ -39,7 +39,7 @@ def main():
 	q = nfqueue.queue()
 	q.open()
 	q.bind(socket.AF_INET)
-	q.set_callback(cb)
+	q.set_callback(dnsspoof_cb)
 	q.create_queue(0)
 	try:
 		q.try_run()
