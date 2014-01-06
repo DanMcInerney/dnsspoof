@@ -3,9 +3,8 @@ dnsspoof
 
 DNS spoofer. Drops DNS responses from the router and replaces it with the spoofed DNS response
 
-dnsspoof.py
-
-Usage:
+Usage
+------
 
 '''shell
 python dnsspoof.py -r 192.168.0.1 -v 192.168.0.5 -d domaintospoof.com
