@@ -1,7 +1,7 @@
 dnsspoof
 ========
 
-DNS spoofer. Drops DNS responses from the router and replaces it with the spoofed DNS response
+DNS spoofer. Drops DNS responses before they hit the router then replaces them with the spoofed DNS response.
 
 Usage
 ------
